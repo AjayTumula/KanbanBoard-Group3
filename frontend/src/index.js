@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import { AuthProvider } from './context/AuthProvider';
 import './index.css';
+import "./styles.css";
 
 export default function App() {
   return (
