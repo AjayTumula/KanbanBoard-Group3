@@ -7,9 +7,7 @@
 }
 
 html {
-    font-family: 'Nunito', sans-serif;
-    font-size: 22px;
-    color: #fff;
+    color: rgb(7, 7, 7);
 }
 
 body {
@@ -53,8 +51,6 @@ input[type="text"],
 input[type="password"],
 button,
 textarea {
-  font-family: 'Nunito', sans-serif;
-  font-size: 22px;
   padding: 0.25rem;
   border-radius: 0.5rem;
 }
@@ -69,7 +65,7 @@ button {
 }
 
 .instructions {
-    font-size: 0.75rem;
+    font-size: 0.75rem; 
     border-radius: 0.5rem;
     background: #000;
     color: #fff;
