@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { X } from "react-feather";
 
 function CustomInput(props) {
   const {
@@ -39,7 +38,7 @@ function CustomInput(props) {
           />
           <div className="custom-input-edit-footer">
             <button type="submit">{buttonText || "Add"}</button>
-            <X onClick={() => setIsCustomInput(false)} className="closeIcon" />
+            <button type="submit" onClick={() => setIsCustomInput(false)}>{"Cancel"}</button>
           </div>
         </form>
       ) : (

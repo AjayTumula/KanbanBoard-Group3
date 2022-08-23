@@ -20,6 +20,27 @@ const getAllStatuses = async (req, res) => {
   }
 };
 
+const addNewStatus = async (req, res) => {
+    try {
+        await db.serialize(function() {
+            return db.run("INSERT INTO statuses (name) VALUES (?)", [req.body.name],  function(err, data) {
+                if(err){
+                    res.send("Error encountered while inserting");
+                    return console.error(err.message);
+                }
+                else {
+                    res.send({
+                        status: 'success'
+                    });
+                }
+            });
+        });
+    } catch (error) {
+    return res.status(401).json({ error: "Could not insert status data" });
+  }
+};
+
 module.exports = {
     getAllStatuses,
+    addNewStatus,
 }
