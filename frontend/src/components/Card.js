@@ -8,7 +8,7 @@ import CardInfo from "./CardInfo";
 function Card(props) {
   const { card, boardId, removeCard, onDragEnd, onDragEnter, updateCard } =
     props;
-  const { id, title, desc, date, tasks, labels } = card;
+  const { id, name, description, date, tasks, priority } = card;
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -32,9 +32,7 @@ function Card(props) {
       >
         <div className="card-top">
           <div className="card-top-labels">
-            {labels?.map((item, index) => (
-              <Chip key={index} item={item} />
-            ))}
+            <Chip label={priority} />
           </div>
           <div
             className="card-top-more"
@@ -49,14 +47,14 @@ function Card(props) {
                 class="board-dropdown"
                 onClose={() => setShowDropdown(false)}
               >
-                <p onClick={() => removeCard(boardId, id)}>Delete Card</p>
+                <p onClick={() => removeCard(boardId, id)}>Delete Task</p>
               </Dropdown>
             )}
           </div>
         </div>
-        <div className="card-title">{title}</div>
+        <div className="card-title">{name}</div>
         <div>
-          <p title={desc}>
+          <p title={description}>
             <AlignLeft />
           </p>
         </div>

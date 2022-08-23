@@ -1,32 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Board from "./Board";
 import CustomInput from "./CustomInput";
-import { getTasksData } from '../api/api';
+import { addNewStatus, getStatusData, getTasksData } from '../api/api';
 
 const KanbanBoard = () => {
 const [boards, setBoards] = useState([]);
-useEffect(() => {
-  fetchData();
-}, []);
+const [tasks, setTasks] = useState([]);
 
-async function fetchData() {
-  const response = getTasksData()
-  setBoards(response);
-}
+const fetchData = useCallback(
+  async () => {
+    const tasksResponse = await getTasksData()
+    const statusResponse = await getStatusData()
+    setTasks(tasksResponse);
+    setBoards(statusResponse);
+  },
+  [setTasks, setBoards],
+);
+
+useEffect(
+  () => {
+    fetchData();
+  },
+  [fetchData]
+);
+
 const [targetCard, setTargetCard] = useState({
   boardId: 0,
   cardId: 0,
 });
 
-const addboardHandler = (name) => {
-  const tempBoardsList = [...boards];
-  tempBoardsList.push({
-    id: Date.now() + Math.random() * 2,
-    title: name,
-    cards: [],
-  });
-  setBoards(tempBoardsList);
-};
+const addboardHandler = useCallback(
+  (name) => {
+    const response = addNewStatus({ name: name })
+    if (response.status === 'success') {
+      const tempBoardsList = [...boards];
+      tempBoardsList.push({
+        id: Date.now() + Math.random() * 2,
+        name: name,
+        cards: [],
+      });
+      setBoards(tempBoardsList);
+    }
+  },
+  [setBoards, boards],
+);
 
 const removeBoard = (boardId) => {
   const boardIndex = boards.findIndex((item) => item.id === boardId);
@@ -127,42 +144,42 @@ const onDragEnter = (boardId, cardId) => {
   });
 };
 
-useEffect(() => {
-  // updateLocalStorageBoards(boards);
-}, [boards]);
-  return (
-    <div className="app">
-        <div className="app-nav">
-            <h1>Kanban Board</h1>
-        </div>
-        <div className="app-boards-container">
-        <div className="app-boards">
-          {boards.map((item) => (
-            <Board
-                key={item.id}
-                board={item}
-                addCard={addCardHandler}
-                removeBoard={() => removeBoard(item.id)}
-                removeCard={removeCard}
-                onDragEnd={onDragEnd}
-                onDragEnter={onDragEnter}
-                updateCard={updateCard}
-            />
-            ))}
-            <div className="app-boards-last">
-            <CustomInput
-                displayClass="app-boards-add-board"
-                editClass="app-boards-add-board-edit"
-                placeholder="Enter Board Name"
-                text="Add Board"
-                buttonText="Add Board"
-                onSubmit={addboardHandler}
-            />
-            </div>
-        </div>
-        </div>
-    </div>
-  );
+console.log('boards :', boards)
+
+return (
+  <div className="app">
+      <div className="app-nav">
+          <h1>Kanban Board</h1>
+      </div>
+      <div className="app-boards-container">
+      <div className="app-boards">
+        {boards.map((item) => (
+          <Board
+            key={item.id}
+            board={item}
+            addCard={addCardHandler}
+            removeBoard={() => removeBoard(item.id)}
+            removeCard={removeCard}
+            onDragEnd={onDragEnd}
+            onDragEnter={onDragEnter}
+            updateCard={updateCard}
+            tasks={tasks}
+          />
+          ))}
+          <div className="app-boards-last">
+          <CustomInput
+            displayClass="app-boards-add-board"
+            editClass="app-boards-add-board-edit"
+            placeholder="Enter Board Name"
+            text="Add Board"
+            buttonText="Add Board"
+            onSubmit={addboardHandler}
+          />
+          </div>
+      </div>
+      </div>
+  </div>
+);
 };
 
 export default KanbanBoard;
