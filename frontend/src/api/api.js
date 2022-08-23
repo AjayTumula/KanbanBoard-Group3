@@ -1,9 +1,14 @@
 import axios from 'axios';
 
-const TASKS_URL = '/tasks';
-
 export const getTasksData = async () => {
-    const response = await axios.get(TASKS_URL);
+    const TASKS_URL = '/tasks';
+    const response = await axios.get(TASKS_URL).then((response) => response.data);
+    return response.data;
+}
+
+export const getStatusData = async () => {
+    const STATUS_URL = '/statuses';
+    const response = await axios.get(STATUS_URL).then((response) => response.data);
     return response.data;
 }
 

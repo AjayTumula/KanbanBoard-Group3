@@ -1,9 +1,9 @@
 const db = require("../database");
 
-const getAllTasks = async (req, res) => {
+const getAllStatuses = async (req, res) => {
     try {
         await db.serialize(function() {
-            return db.all("SELECT t.*, p.name AS priority FROM tasks AS t JOIN priorities AS p ON t.priority_id = p.id", function(err, rows) {
+            return db.all("SELECT * from statuses", function(err, rows) {
                 if(err){
                     res.send("Error encountered while fetching");
                     return console.error(err.message);
@@ -16,10 +16,10 @@ const getAllTasks = async (req, res) => {
             });
         });
     } catch (error) {
-    return res.status(401).json({ error: "Could not fetch tasks data" });
+    return res.status(401).json({ error: "Could not fetch status data" });
   }
 };
 
 module.exports = {
-    getAllTasks,
+    getAllStatuses,
 }

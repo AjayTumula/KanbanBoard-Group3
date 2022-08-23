@@ -1,18 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Board from "./Board";
 import CustomInput from "./CustomInput";
-import { getTasksData } from '../api/api';
+import { getStatusData, getTasksData } from '../api/api';
 
 const KanbanBoard = () => {
 const [boards, setBoards] = useState([]);
-useEffect(() => {
-  fetchData();
-}, []);
+const [tasks, setTasks] = useState([]);
 
-async function fetchData() {
-  const response = getTasksData()
-  setBoards(response);
-}
+const fetchData = useCallback(
+  async () => {
+    const tasksResponse = await getTasksData()
+    const statusResponse = await getStatusData()
+    setTasks(tasksResponse);
+    setBoards(statusResponse);
+  },
+  [setTasks, setBoards],
+);
+
+useEffect(
+  () => {
+    fetchData();
+  },
+  [fetchData]
+);
+
 const [targetCard, setTargetCard] = useState({
   boardId: 0,
   cardId: 0,
@@ -127,9 +138,6 @@ const onDragEnter = (boardId, cardId) => {
   });
 };
 
-useEffect(() => {
-  // updateLocalStorageBoards(boards);
-}, [boards]);
   return (
     <div className="app">
         <div className="app-nav">
@@ -147,6 +155,7 @@ useEffect(() => {
                 onDragEnd={onDragEnd}
                 onDragEnter={onDragEnter}
                 updateCard={updateCard}
+                tasks={tasks}
             />
             ))}
             <div className="app-boards-last">
