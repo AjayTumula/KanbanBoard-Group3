@@ -20,6 +20,28 @@ const getAllTasks = async (req, res) => {
   }
 };
 
+const addNewTask = async (req, res) => {
+    try {
+        await db.serialize(function() {
+            return db.run("INSERT INTO tasks (name, status_id, date, description, project_id, priority_id ) VALUES (?, ?, ?, ?, ?, ?)", 
+            [req.body.name, req.body.status_id, req.body.date, req.body.description, req.body.project_id, req.body.priority_id],  function(err) {
+                if(err){
+                    res.send("Error encountered while inserting");
+                    return console.error(err.message);
+                }
+                else {
+                    res.send({
+                        status: 'success'
+                    });
+                }
+            });
+        });
+    } catch (error) {
+    return res.status(401).json({ error: "Could not insert status data" });
+  }
+};
+
 module.exports = {
     getAllTasks,
+    addNewTask,
 }

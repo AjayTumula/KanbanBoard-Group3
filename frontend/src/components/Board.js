@@ -5,7 +5,7 @@ import CustomInput from "./CustomInput";
 const Board = (props) => {
   const {
     board,
-    addCard,
+    addTask,
     removeCard,
     onDragEnd,
     onDragEnter,
@@ -39,7 +39,8 @@ const Board = (props) => {
             placeholder="Enter Task Title"
             displayClass="board-add-card"
             editClass="board-add-card-edit"
-            onSubmit={(value) => addCard(board?.id, value)}
+            onSubmit={(value) => addTask(board?.id, value)}
+            isAddTask={true}
           />
         </div>
       </div>

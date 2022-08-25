@@ -11,6 +11,11 @@ export const getTasksData = async () => {
     return response.data;
 }
 
+export const addNewTask = async (params) => {
+    const response = await axios.post(TASKS_URL, params).then((response) => response);
+    return response;
+}
+
 export const getStatusData = async () => {
     const response = await axios.get(STATUS_URL).then((response) => response.data);
     return response.data;
@@ -39,8 +44,8 @@ export const registerUser = async (user, pwd) => {
 }
 
 export const addNewStatus = async (params) => {
-    const response = await axios.post(STATUS_URL, params).then((response) => response.data);
-    return response.data;
+    const response = await axios.post(STATUS_URL, params).then((response) => response);
+    return response;
 }
 
 export const getProjectsList = async () => {

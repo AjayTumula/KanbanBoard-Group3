@@ -32,7 +32,7 @@ function Card(props) {
       >
         <div className="card-top">
           <div className="card-top-labels">
-            <Chip label={priority} />
+            <Chip label={priority || 'Low'} />
           </div>
           <div
             className="card-top-more"

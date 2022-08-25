@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Board from "./Board";
 import CustomInput from "./CustomInput";
-import { addNewStatus, getStatusData, getTasksData } from '../api/api';
+import { addNewStatus, addNewTask, getStatusData, getTasksData } from '../api/api';
 
 const KanbanBoard = () => {
 const [boards, setBoards] = useState([]);
 const [tasks, setTasks] = useState([]);
+const [refetchData, setRefetchData] = useState(true);
 
 const fetchData = useCallback(
   async () => {
@@ -13,15 +14,16 @@ const fetchData = useCallback(
     const statusResponse = await getStatusData()
     setTasks(tasksResponse);
     setBoards(statusResponse);
+    setRefetchData(false);
   },
   [setTasks, setBoards],
 );
 
 useEffect(
   () => {
-    fetchData();
+    refetchData && fetchData();
   },
-  [fetchData]
+  [fetchData, refetchData]
 );
 
 const [targetCard, setTargetCard] = useState({
@@ -29,20 +31,15 @@ const [targetCard, setTargetCard] = useState({
   cardId: 0,
 });
 
-const addboardHandler = useCallback(
-  (name) => {
-    const response = addNewStatus({ name: name })
-    if (response.status === 'success') {
-      const tempBoardsList = [...boards];
-      tempBoardsList.push({
-        id: Date.now() + Math.random() * 2,
-        name: name,
-        cards: [],
-      });
-      setBoards(tempBoardsList);
+const addboardHandler = 
+useCallback(
+  async (inputText) => {
+    const response = await addNewStatus({ name: inputText })
+    if (response.data.status === 'success') {
+      setRefetchData(true)
     }
   },
-  [setBoards, boards],
+  [setRefetchData]
 );
 
 const removeBoard = (boardId) => {
@@ -54,21 +51,28 @@ const removeBoard = (boardId) => {
   setBoards(tempBoardsList);
 };
 
-const addCardHandler = (boardId, title) => {
-  const boardIndex = boards.findIndex((item) => item.id === boardId);
-  if (boardIndex < 0) return;
-
-  const tempBoardsList = [...boards];
-  tempBoardsList[boardIndex].cards.push({
-    id: Date.now() + Math.random() * 2,
-    title,
-    labels: [],
-    date: "",
-    tasks: [],
-    desc: "",
-  });
-  setBoards(tempBoardsList);
-};
+const addTaskHandler = 
+useCallback(
+  async (boardId, values) => {
+    const { inputText, description } = values
+    const boardIndex = boards.findIndex((item) => item.id === boardId);
+    if (boardIndex < 0) return;
+    const newTask = {
+      id: tasks.length + 1,
+      project_id: 1,
+      name: inputText,
+      status_id: boardId,
+      priority_id: 3,
+      date: Date.now(),
+      description: description,
+    }
+    const response = await addNewTask(newTask)
+    if (response.data.status === 'success') {
+      setRefetchData(true)
+    }
+  },
+  [boards, tasks, setRefetchData]
+);
 
 const removeCard = (boardId, cardId) => {
   const boardIndex = boards.findIndex((item) => item.id === boardId);
@@ -144,8 +148,6 @@ const onDragEnter = (boardId, cardId) => {
   });
 };
 
-console.log('boards :', boards)
-
 return (
   <div className="app">
       <div className="app-nav">
@@ -157,7 +159,7 @@ return (
           <Board
             key={item.id}
             board={item}
-            addCard={addCardHandler}
+            addTask={addTaskHandler}
             removeBoard={() => removeBoard(item.id)}
             removeCard={removeCard}
             onDragEnd={onDragEnd}
