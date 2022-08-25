@@ -4,6 +4,7 @@ const TASKS_URL = '/tasks';
 const STATUS_URL = '/statuses';
 const LOGIN_URL = '/login'; 
 const REGISTER_URL = '/register';
+const PROJECTS_URL = '/projects';
 
 export const getTasksData = async () => {
     const response = await axios.get(TASKS_URL).then((response) => response.data);
@@ -42,3 +43,7 @@ export const addNewStatus = async (params) => {
     return response.data;
 }
 
+export const getProjectsList = async () => {
+    const response = await axios.get(PROJECTS_URL).then((response) => response.data);
+    return response.data;
+}

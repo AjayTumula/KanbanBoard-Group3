@@ -1,10 +1,10 @@
 var express = require('express');
-const { addNewUsers } = require('../controllers/register');
+const { addNewUser } = require('../controllers/register');
 
 var router = express.Router();
 
 /*Fetch all tasks from database*/
-router.post('/', addNewUsers);
+router.post('/', addNewUser);
 
 module.exports = router;
 
