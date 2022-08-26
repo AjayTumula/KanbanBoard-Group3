@@ -5,6 +5,7 @@ import { registerUser } from "../api/api";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 const Register = () => {
     const userRef = useRef();
@@ -13,6 +14,10 @@ const Register = () => {
     const [user, setUser] = useState('');
     const [validName, setValidName] = useState(false);
     const [userFocus, setUserFocus] = useState(false);
+
+    const [email, setEmail] = useState('');
+    const [validEmail, setValidEmail] = useState(false);
+    const [emailFocus, setEmailFocus] = useState(false);
 
     const [pwd, setPwd] = useState('');
     const [validPwd, setValidPwd] = useState(false);
@@ -34,25 +39,30 @@ const Register = () => {
     }, [user])
 
     useEffect(() => {
+        setValidEmail(EMAIL_REGEX.test(email));
+    }, [email])
+
+    useEffect(() => {
         setValidPwd(PWD_REGEX.test(pwd));
         setValidMatch(pwd === matchPwd);
     }, [pwd, matchPwd])
 
     useEffect(() => {
         setErrMsg('');
-    }, [user, pwd, matchPwd])
+    }, [user, email, pwd, matchPwd])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         // if button enabled with JS hack
         const v1 = USER_REGEX.test(user);
         const v2 = PWD_REGEX.test(pwd);
-        if (!v1 || !v2) {
+        const v3 = EMAIL_REGEX.test(email);
+        if (!v1 || !v2 || !v3) {
             setErrMsg("Invalid Entry");
             return;
         }
         try {
-            const response = registerUser(user, pwd)
+            const response = registerUser(user, email, pwd)
             console.log(response?.data);
             console.log(response?.accessToken);
             console.log(JSON.stringify(response))
@@ -61,6 +71,7 @@ const Register = () => {
             //need value attrib on inputs for this
             setUser('');
             setPwd('');
+            setEmail('');
             setMatchPwd('');
         } catch (err) {
             if (!err?.response) {
@@ -112,6 +123,30 @@ const Register = () => {
                             Must begin with a letter.<br />
                             Letters, numbers, underscores, hyphens allowed.
                         </p>
+                        
+                        <label htmlFor="email">
+                            Email:
+                            <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
+                            <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            ref={userRef}
+                            autoComplete="off"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                            required
+                            aria-invalid={validEmail ? "false" : "true"}
+                            aria-describedby="emailnote"
+                            onFocus={() => setEmailFocus(true)}
+                            onBlur={() => setEmailFocus(false)}
+                        />
+                        <p id="emailnote" className={emailFocus && user && !validEmail ? "instructions" : "offscreen"}>
+                            <FontAwesomeIcon icon={faInfoCircle} />
+                            Must and should contain . and @ <br />
+                            Letters, numbers, underscores, hyphens allowed.
+                        </p>
 
 
                         <label htmlFor="password">
@@ -159,7 +194,7 @@ const Register = () => {
                             Must match the first password input field.
                         </p>
 
-                        <button disabled={!validName || !validPwd || !validMatch ? true : false}>Sign Up</button>
+                        <button disabled={!validName || !validEmail || !validPwd || !validMatch ? true : false}>Sign Up</button>
                     </form>
                     <p>
                         Already registered?<br />
