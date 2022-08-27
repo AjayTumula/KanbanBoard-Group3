@@ -20,6 +20,7 @@ function Card(props) {
           card={card}
           boardId={boardId}
           updateCard={updateCard}
+          setShowModal={setShowModal}
         />
       )}
       <div

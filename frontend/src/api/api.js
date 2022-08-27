@@ -5,6 +5,7 @@ const STATUS_URL = '/statuses';
 const LOGIN_URL = '/login'; 
 const REGISTER_URL = '/register';
 const PROJECTS_URL = '/projects';
+const PRIORITY_URL = '/priorities'
 
 export const getTasksData = async () => {
     const response = await axios.get(TASKS_URL).then((response) => response.data);
@@ -50,5 +51,10 @@ export const addNewStatus = async (params) => {
 
 export const getProjectsList = async () => {
     const response = await axios.get(PROJECTS_URL).then((response) => response.data);
+    return response.data;
+}
+
+export const getPriorityList = async () => {
+    const response = await axios.get(PRIORITY_URL).then((response) => response.data);
     return response.data;
 }

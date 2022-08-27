@@ -287,6 +287,13 @@ body{
     flex-direction: column;
     gap: 10px;
   }
+
+  .cardinfo-box-select {
+    width: 56%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
   
   .cardinfo-box-title {
     display: flex;
