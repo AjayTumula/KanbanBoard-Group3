@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Calendar, CheckSquare, List, Tag, Trash, Type } from "react-feather";
+import { Calendar, CheckCircle, List, Tag, User, Type, MessageSquare } from "react-feather";
 import Modal from "./Modal";
 import CustomInput from "./CustomInput";
 import Chip from "./Chip";
@@ -119,7 +119,7 @@ function CardInfo(props) {
   }, [cardValues]);
 
   const calculatedPercent = calculatePercent();
-  console.log('cardValues.date', cardValues.date)
+
   return (
     <Modal onClose={onClose}>
       <div className="cardinfo">
@@ -156,8 +156,8 @@ function CardInfo(props) {
           </div>
           <input
             type="date"
-            defaultValue={new Date(cardValues.date)}
-            min={new Date().toISOString().substr(0, 10)}
+            defaultValue={new Date(cardValues.date).toISOString().substring(0, 10)}
+            min={new Date().toISOString().substring(0, 10)}
             onChange={(event) => updateDate(event.target.value)}
           />
         </div>
@@ -176,7 +176,7 @@ function CardInfo(props) {
           <div className="cardinfo-box-select">
             <Select
               label="Priority"
-              // value={cardValues.priority}
+              value={cardValues.priority}
               // onChange={handleChange}
             >
               {
@@ -185,42 +185,10 @@ function CardInfo(props) {
               )}
             </Select>
           </div>
-          {/* <ul>
-            {colorsList.map((item, index) => (
-              <li
-                key={index}
-                style={{ backgroundColor: item }}
-                className={selectedColor === item ? "li-active" : ""}
-                onClick={() => setSelectedColor(item)}
-              />
-            ))}
-          </ul> */}
-          {/* <Dropdown
-            class="board-dropdown"
-            // text="Change Priority"
-            // placeholder="Select"
-            // onSubmit={(value) =>
-            //   addLabel({ color: selectedColor, text: value })
-            // }
-          >
-            <ul>
-              {priorityList.map((item, index) => (
-                <li
-                  key={index}
-                  style={{ backgroundColor: item }}
-                  // className={selectedColor === item ? "li-active" : ""}
-                  onClick={() => setPriorityId(item.id)}
-                >
-                  {item.value}
-                </li>
-              ))}
-            </ul>
-          </Dropdown> */}
         </div>
-
         <div className="cardinfo-box">
           <div className="cardinfo-box-title">
-            <CheckSquare />
+            <CheckCircle />
             <p>Progress</p>
           </div>
           <div className="cardinfo-box-progress-bar">
@@ -231,21 +199,6 @@ function CardInfo(props) {
                 backgroundColor: calculatedPercent === 100 ? "limegreen" : "",
               }}
             />
-          </div>
-          <div className="cardinfo-box-task-list">
-            {cardValues.tasks?.map((item) => (
-              <div key={item.id} className="cardinfo-box-task-checkbox">
-                <input
-                  type="checkbox"
-                  defaultChecked={item.completed}
-                  onChange={(event) =>
-                    updateTask(item.id, event.target.checked)
-                  }
-                />
-                <p className={item.completed ? "completed" : ""}>{item.text}</p>
-                <Trash onClick={() => removeTask(item.id)} />
-              </div>
-            ))}
           </div>
           <div className="custom-input-edit-footer">
             <button type="submit">{"Save"}</button>

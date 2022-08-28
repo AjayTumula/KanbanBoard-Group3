@@ -295,6 +295,16 @@ body{
     gap: 10px;
   }
   
+  .cardinfo-box-comment {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+  }
+
+  .cardinfo-box-comment-box {
+    width: 68%;
+  }
+  
   .cardinfo-box-title {
     display: flex;
     gap: 10px;
@@ -357,6 +367,7 @@ body{
     border-radius: 30px;
     height: 10px;
     border: 1px solid #ccc;
+    margin-bottom: 20px;
   }
   
   .cardinfo-box-progress {
