@@ -15,8 +15,8 @@ function CustomInput(props) {
   const [isCustomInput, setIsCustomInput] = useState(false);
   const [inputText, setInputText] = useState(defaultValue || "");
   const [description, setDescription] = useState(defaultValue || "");
-  const [startDate, setStartDate] = useState(defaultValue || ""); //set to today's date?
-  const [endDate, setEndDate] = useState(defaultValue || ""); //set to today's date?
+  const [startDate, setStartDate] = useState(defaultValue || "");
+  const [endDate, setEndDate] = useState(defaultValue || "");
 
   const submission = (e) => {
     e.preventDefault();
@@ -24,8 +24,8 @@ function CustomInput(props) {
       setInputText(""); 
       if(isAddProject){ 
         setDescription("");
-        setStartDate(""); //set to today's date?
-        setEndDate(""); //set to today's date?
+        setStartDate("");
+        setEndDate("");
         onSubmit({inputText, description, startDate, endDate});
       }
       else if(isAddTask){

@@ -5,6 +5,9 @@ const STATUS_URL = '/statuses';
 const LOGIN_URL = '/login'; 
 const REGISTER_URL = '/register';
 const PROJECTS_URL = '/projects';
+const USERS_LIST_URL = '/users/list';
+const ROLES_URL = '/roles';
+const PROJECT_USER_URL = '/projectroles'
 
 export const getTasksData = async () => {
     const response = await axios.get(TASKS_URL).then((response) => response.data);
@@ -55,5 +58,21 @@ export const getProjectsList = async () => {
 
 export const addProject = async (params) => {
     const response = await axios.post(PROJECTS_URL, params).then((response) => response);
+    return response;
+}
+
+export const getRolesList = async () => {
+    const response = await axios.get(ROLES_URL).then((response) => response.data);
+    return response.data;
+}
+
+export const getUsersList = async () => {
+    const response = await axios.get(USERS_LIST_URL).then((response) => response.data);
+    return response.data;
+}
+
+export const assignUserToProject = async (params) => {
+    console.log(params)
+    const response = await axios.post(PROJECT_USER_URL, params).then((response) => response);
     return response;
 }
