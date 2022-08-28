@@ -21,12 +21,13 @@ const getAllProjects = async (req, res) => {
 };
 
 const addNewProject = async (req, res) => {
-    //pending updating project_roles data
     try {
+        const { inputText, description, startDate, endDate, id} = req.body;
         await db.serialize(function() {
-            return db.run("INSERT INTO projects (name) VALUES (?)", [req.body.name],  function(err, data) {
+            return db.run("INSERT INTO projects (name, id,  description, start_date, end_date ) VALUES (?, ?, ?, ?, ?)", 
+            [inputText, id, description, startDate, endDate],  function(err) {
                 if(err){
-                    res.send("Error encountered while inserting");
+                    res.send("Error encountered while inserting project");
                     return console.error(err.message);
                 }
                 else {
@@ -41,8 +42,6 @@ const addNewProject = async (req, res) => {
   }
 };
 
-//getting individual projects
-//generating project_roles table data
 
 module.exports = {
     getAllProjects,

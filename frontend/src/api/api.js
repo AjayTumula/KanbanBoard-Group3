@@ -58,3 +58,8 @@ export const getPriorityList = async () => {
     const response = await axios.get(PRIORITY_URL).then((response) => response.data);
     return response.data;
 }
+
+export const addProject = async (params) => {
+    const response = await axios.post(PROJECTS_URL, params).then((response) => response);
+    return response;
+}
