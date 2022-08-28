@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Calendar, CheckCircle, List, Tag, User, Type, MessageSquare } from "react-feather";
+import { Calendar, CheckCircle, List, Tag, Type } from "react-feather";
 import Modal from "./Modal";
 import CustomInput from "./CustomInput";
 import Chip from "./Chip";
@@ -7,8 +7,14 @@ import { getPriorityList } from "../api/api";
 import { Select, MenuItem } from "@mui/material";
 
 function CardInfo(props) {
-  const { onClose, card, boardId, updateCard, setShowModal } = props;
-  const [priorityId, setPriorityId] = useState(undefined);
+  const { 
+    onClose,
+    card,
+    // boardId,
+    // updateCard,
+    setShowModal
+  } = props;
+  // const [priorityId, setPriorityId] = useState(undefined);
   const [cardValues, setCardValues] = useState({
     ...card,
   });
@@ -62,29 +68,29 @@ function CardInfo(props) {
   //   });
   // };
 
-  const addTask = (value) => {
-    const task = {
-      id: Date.now() + Math.random() * 2,
-      completed: false,
-      text: value,
-    };
-    setCardValues({
-      ...cardValues,
-      tasks: [...cardValues.tasks, task],
-    });
-  };
+  // const addTask = (value) => {
+  //   const task = {
+  //     id: Date.now() + Math.random() * 2,
+  //     completed: false,
+  //     text: value,
+  //   };
+  //   setCardValues({
+  //     ...cardValues,
+  //     tasks: [...cardValues.tasks, task],
+  //   });
+  // };
 
-  const removeTask = (id) => {
-    const tasks = [...cardValues.tasks];
+  // const removeTask = (id) => {
+  //   const tasks = [...cardValues.tasks];
 
-    const tempTasks = tasks.filter((item) => item.id !== id);
-    setCardValues({
-      ...cardValues,
-      tasks: tempTasks,
-    });
-  };
+  //   const tempTasks = tasks.filter((item) => item.id !== id);
+  //   setCardValues({
+  //     ...cardValues,
+  //     tasks: tempTasks,
+  //   });
+  // };
 
-  const updateTask = (id, value) => {
+  // const updateTask = (id, value) => {
     // const tasks = [...cardValues];
 
     // const index = tasks.findIndex((item) => item.id === id);
@@ -96,7 +102,7 @@ function CardInfo(props) {
     //   ...cardValues,
     //   tasks,
     // });
-  };
+  // };
 
   const calculatePercent = () => {
     if (!cardValues.remainingHours) return 0;
