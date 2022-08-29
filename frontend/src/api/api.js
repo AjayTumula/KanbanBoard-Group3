@@ -5,7 +5,8 @@ const STATUS_URL = '/statuses';
 const LOGIN_URL = '/login'; 
 const REGISTER_URL = '/register';
 const PROJECTS_URL = '/projects';
-const PRIORITY_URL = '/priorities'
+const PRIORITY_URL = '/priorities';
+const COMMENTS_URL = '/comments';
 
 export const getTasksData = async () => {
     const response = await axios.get(TASKS_URL).then((response) => response.data);
@@ -61,5 +62,20 @@ export const getPriorityList = async () => {
 
 export const addProject = async (params) => {
     const response = await axios.post(PROJECTS_URL, params).then((response) => response);
+    return response;
+}
+
+export const addComment = async (params) => {
+    const response = await axios.post(COMMENTS_URL, params).then((response) => response);
+    return response;
+}
+
+export const getCommentsListByTask = async (id) => {
+    const response = await axios.get(`${COMMENTS_URL}/${id}`).then((response) => response.data);
+    return response.data;
+}
+
+export const deleteComment = async (id) => {
+    const response = await axios.delete(`${COMMENTS_URL}/${id}`).then((response) => response.data);
     return response;
 }

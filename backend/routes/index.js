@@ -6,6 +6,7 @@ const login = require('./login')
 const register = require('./register')
 const projectsRoutes = require('./projects')
 const prioritiesRoutes = require('./priorities')
+const commentsRoutes = require('./comments')
 
 var router = express.Router();
 
@@ -16,5 +17,6 @@ router.use("/login", login);
 router.use("/register", register);
 router.use("/projects", projectsRoutes);
 router.use("/priorities", prioritiesRoutes);
+router.use("/comments", commentsRoutes);
 
 module.exports = router;
