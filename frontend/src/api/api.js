@@ -5,7 +5,7 @@ const STATUS_URL = '/statuses';
 const LOGIN_URL = '/login'; 
 const REGISTER_URL = '/register';
 const PROJECTS_URL = '/projects';
-const PRIORITY_URL = '/priorities'
+const PRIORITY_URL = '/priorities';
 
 export const getTasksData = async () => {
     const response = await axios.get(TASKS_URL).then((response) => response.data);
@@ -22,25 +22,15 @@ export const getStatusData = async () => {
     return response.data;
 }
 
-export const loginUser = async (user, pwd) => {
-    const response = await axios.post(LOGIN_URL,
-        JSON.stringify({ user, pwd }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true
-        }
-    );
+
+export const login = async (params) => {
+    const response = await axios.post(LOGIN_URL, params).then((response) => response);
     return response;
 }
 
-export const registerUser = async (user, pwd) => {
-    const response = await axios.post(REGISTER_URL,
-        JSON.stringify({ user, pwd }),
-        {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true
-        }
-    );
+
+export const addNewUser = async (params) => {
+    const response = await axios.post(REGISTER_URL, params).then((response) => response);
     return response;
 }
 
@@ -60,6 +50,11 @@ export const getPriorityList = async () => {
 }
 
 export const addProject = async (params) => {
+    const response = await axios.post(PROJECTS_URL, params).then((response) => response);
+    return response;
+}
+
+export const changePassword = async (params) => {
     const response = await axios.post(PROJECTS_URL, params).then((response) => response);
     return response;
 }

@@ -8,7 +8,7 @@ import CustomInput from "./CustomInput";
 const Project = () => {
     const [projects, setProjects] = useState([]);
     const [refetchData, setRefetchData] = useState(true);
-
+    
     const fetchData = useCallback(
         async () => {
             const projectListResponse = await getProjectsList()
@@ -37,7 +37,7 @@ const Project = () => {
             [projects, setRefetchData]
         );
 
-    return (
+           return (
         <div className="app">
             <div className="app-nav">
                 <h1>Projects Dashboard</h1>
@@ -52,7 +52,17 @@ const Project = () => {
                         placeholder="Add project name"
                     />
                 </div>
+                
+                <div className="app">
+                    <div>
+                       <CustomInput
+                        text= "Changepassword"
+                        buttontext= "Changepassword"
+                        />
+                    </div>
+                </div>
             </div>
+           
             <div className="app-boards-container">
                 <div className="app-boards">
                     {projects.map((item) => (

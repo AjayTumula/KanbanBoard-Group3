@@ -1,7 +1,11 @@
+const db = require("../database");
+
 const addNewUser = async (req, res) => {
     try {
         await db.serialize(function() {
-            return db.run("INSERT INTO users (name,password) VALUES (?)(?)", [req.body.name],[req.body.pwd],  function(err, data) {
+            return db.run("INSERT INTO users (name,password,email) VALUES (?,?,?)", 
+            [req.body.name, req.body.password, req.body.email], 
+                function(err) {
                 if(err){
                     res.send("Error encountered while inserting");
                     return console.error(err.message);
@@ -14,7 +18,7 @@ const addNewUser = async (req, res) => {
             });
         });
     } catch (error) {
-    return res.status(401).json({ error: "Could not insert status data" });
+    return res.status(401).json({ error: "Could not insert user data" });
   }
 };
 
