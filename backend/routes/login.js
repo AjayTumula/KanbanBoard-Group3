@@ -1,10 +1,10 @@
 var express = require('express');
-const { getAllUsers } = require('../controllers/login');
+const { getUser } = require('../controllers/login');
 
 var router = express.Router();
 
 /*Fetch all tasks from database*/
-router.get('/', getAllUsers);
+router.post('/', getUser);
 
 module.exports = router;
 
