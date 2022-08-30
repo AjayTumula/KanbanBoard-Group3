@@ -92,3 +92,8 @@ export const deleteComment = async (id) => {
     const response = await axios.delete(`${COMMENTS_URL}/${id}`).then((response) => response.data);
     return response;
 }
+
+export const ChangePassword = async (id) => {
+    const response = await axios.put(`${LOGIN_URL}/${id}`).then((response) => response.data);
+    return response;
+}

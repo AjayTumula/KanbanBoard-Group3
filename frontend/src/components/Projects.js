@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { getProjectsList, addProject } from '../api/api';
 import CustomInput from "./CustomInput";
 import AssignUser from "./AssignUser";
+import ChangePassword from "./ChangePassword";
 
 // display project and assign users
 //user assigned to project and diff roles
@@ -9,6 +10,7 @@ import AssignUser from "./AssignUser";
 const Project = () => {
     const [projects, setProjects] = useState([]);
     const [refetchData, setRefetchData] = useState(true);
+    const [showChangePassword, setShowChangePassword] = useState(false);
     
     const fetchData = useCallback(
         async () => {
@@ -56,10 +58,8 @@ const Project = () => {
                 
                 <div className="app">
                     <div>
-                       <CustomInput
-                        text= "Changepassword"
-                        buttontext= "Changepassword"
-                        />
+                       <button onClick={setShowChangePassword(true)}> Change Password</button>
+                       <ChangePassword/>
                     </div>
                 </div>
             </div>

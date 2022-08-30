@@ -27,6 +27,27 @@ const getUser = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+    try {
+        await db.serialize(function() {
+            return db.all("UPDATE users SET password = ? WHERE users.id = ?" , [req,body.newPassword, req.body.uer_id], function(err, rows) {
+                if(err){
+                    res.send("Error encountered while fetching the password");
+                    return console.error(err.message);
+                }
+                else {
+                    res.send({
+                        data: rows,
+                    });
+                }
+            });
+        });
+    } catch (error) {
+    return res.status(401).json({ error: "Could not change password" });
+  }
+};
+
 module.exports = {
     getUser,
+    changePassword,
 }
