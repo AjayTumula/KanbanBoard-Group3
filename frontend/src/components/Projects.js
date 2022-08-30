@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { getProjectsList, addProject } from '../api/api';
 import CustomInput from "./CustomInput";
+import AssignUser from "./AssignUser";
 
 // display project and assign users
 //user assigned to project and diff roles
@@ -65,7 +66,10 @@ const Project = () => {
                                     </p>
                                 </div>
                                 <div className="board-cards custom-scroll">
-                                    <p>{item.description}</p></div></div></div>
+                                    <p>{item.description}</p></div>
+                                <AssignUser
+                                    projectId={item.id} />
+                            </div></div>
                     ))}
                 </div>
             </div>
