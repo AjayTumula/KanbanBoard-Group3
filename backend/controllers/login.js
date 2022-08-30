@@ -10,7 +10,7 @@ const getUser = async (req, res) => {
                     return console.error(err.message);
                 }
                 else {
-                    if(rows && [0].password === req.body.password){
+                    if(rows && rows[0].password === req.body.password){
                         res.send({
                             loggedIn : true,
                         });
