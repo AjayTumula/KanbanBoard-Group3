@@ -320,12 +320,18 @@ body{
     transform: translateY(2px);
   }
 
+  /* .comment-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  } */
+
   .trash-icon {
     padding-left: 6px;
     display: inline;
     vertical-align: middle;
     margin-bottom: 4px;
-    margin-left: 277px;
+    /* margin-left: 277px; */
     cursor: pointer;
   }
 

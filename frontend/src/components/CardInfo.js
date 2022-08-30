@@ -266,10 +266,10 @@ function CardInfo(props) {
               <p>Comments</p>
             </div>
             {commentsList.map((comment, index) => <li key={index}>
-              <span>
+              <span className="comment-container">
                 {comment.username} : {comment.description}
-                <Trash2 className="trash-icon" onClick={() => handleDeleteComment(comment.id)}/>
-              </span>
+                  <Trash2 className="trash-icon" onClick={() => handleDeleteComment(comment.id)}/>
+                </span>
             </li>)}
             <div className="cardinfo-box-comment">
               <textarea className="cardinfo-box-comment-box" value={comment} onChange={(e)=>setComment(e.target.value)} />
