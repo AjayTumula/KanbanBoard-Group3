@@ -301,6 +301,34 @@ body{
     gap: 50px;
   }
 
+  .add-comment-button {
+    cursor: pointer;
+    border-radius: 5px;
+    outline: none;
+    background-color: #0079bf;
+    color: #fff;
+    border: none;
+    transition: 100ms ease;
+    padding: 10px;
+  }
+
+  .add-comment-button:hover {
+    background-color: #046daa;
+  }
+  
+  .add-comment-button:active {
+    transform: translateY(2px);
+  }
+
+  .trash-icon {
+    padding-left: 6px;
+    display: inline;
+    vertical-align: middle;
+    margin-bottom: 4px;
+    margin-left: 277px;
+    cursor: pointer;
+  }
+
   .cardinfo-box-comment-box {
     width: 68%;
   }

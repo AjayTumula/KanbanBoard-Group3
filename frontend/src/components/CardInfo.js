@@ -1,25 +1,27 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Calendar, CheckCircle, List, Tag, Type } from "react-feather";
+import { Calendar, CheckCircle, List, Tag, User, Type, MessageSquare, Trash2 } from "react-feather";
 import Modal from "./Modal";
 import CustomInput from "./CustomInput";
 import Chip from "./Chip";
-import { getPriorityList } from "../api/api";
+import { getCommentsListByTask, getPriorityList, addComment, deleteComment } from "../api/api";
 import { Select, MenuItem } from "@mui/material";
 
 function CardInfo(props) {
-  const { 
+  const {
     onClose,
-    card,
+    task,
     // boardId,
     // updateCard,
     setShowModal
   } = props;
   // const [priorityId, setPriorityId] = useState(undefined);
   const [cardValues, setCardValues] = useState({
-    ...card,
+    ...task,
   });
-
+  const [comment, setComment] = useState('');
   const [priorityList, setPriorityList] = useState([]);
+  const [commentsList, setCommentsList] = useState([]);
+  const [refetchData, setRefetchData] = useState(true);
   
   const fetchPriorities = useCallback(
     async () => {
@@ -29,11 +31,23 @@ function CardInfo(props) {
     [setPriorityList],
   );
   
+  const fetchComments = useCallback(
+    async () => {
+      const response = await getCommentsListByTask(task.id)
+      setCommentsList(response);
+    },
+    [setCommentsList, task],
+  );
+
   useEffect(
     () => {
-      fetchPriorities();
+      if(refetchData) {
+        fetchPriorities();
+        fetchComments();
+        setRefetchData(false);
+      }
     },
-    [fetchPriorities]
+    [fetchPriorities, fetchComments, refetchData, setRefetchData]
   );
 
   const updateTitle = (value) => {
@@ -119,10 +133,31 @@ function CardInfo(props) {
     });
   };
 
-  useEffect(() => {
-    // if (updateCard) updateCard(boardId, cardValues.id, cardValues);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cardValues]);
+  const handleAddComment = useCallback(
+    async () => {
+      const newComment = {
+        task_id: task.id,
+        user_id: 3,
+        description: comment
+      }
+      const response = await addComment(newComment)
+      if (response.data.status === 'success') {
+        setRefetchData(true);
+        setComment('');
+      }
+    },
+    [task, comment, setRefetchData],
+  );
+
+  const handleDeleteComment = useCallback(
+    async (id) => {
+      const response = await deleteComment(id)
+      if (response.status === 'success') {
+        setRefetchData(true);
+      }
+    },
+    [setRefetchData],
+  );
 
   const calculatedPercent = calculatePercent();
 
@@ -167,7 +202,25 @@ function CardInfo(props) {
             onChange={(event) => updateDate(event.target.value)}
           />
         </div>
-
+        <div className="cardinfo-box">
+          <div className="cardinfo-box-title">
+            <User />
+            <p>Assignee</p>
+          </div>
+          <div className="cardinfo-box-select">
+            <Select
+              label="Assignee"
+              value={''}
+              // onChange={handleChange}
+              style={{height: '40px'}}
+            >
+              {
+                [].map((user, index) =>
+                <MenuItem key={index} value={user.id}>{user.name}</MenuItem>
+              )}
+            </Select>
+          </div>
+        </div>
         <div className="cardinfo-box">
           <div className="cardinfo-box-title">
             <Tag />
@@ -184,6 +237,7 @@ function CardInfo(props) {
               label="Priority"
               value={cardValues.priority}
               // onChange={handleChange}
+              style={{height: '40px'}}
             >
               {
                 priorityList.map((priority, index) =>
@@ -205,6 +259,22 @@ function CardInfo(props) {
                 backgroundColor: calculatedPercent === 100 ? "limegreen" : "",
               }}
             />
+          </div>
+          <div className="cardinfo-box">
+            <div className="cardinfo-box-title">
+              <MessageSquare />
+              <p>Comments</p>
+            </div>
+            {commentsList.map((comment, index) => <li key={index}>
+              <span>
+                {comment.username} : {comment.description}
+                <Trash2 className="trash-icon" onClick={() => handleDeleteComment(comment.id)}/>
+              </span>
+            </li>)}
+            <div className="cardinfo-box-comment">
+              <textarea className="cardinfo-box-comment-box" value={comment} onChange={(e)=>setComment(e.target.value)} />
+              <button className="add-comment-button" type="submit" onClick={handleAddComment}>{"Add comment"}</button>
+            </div>
           </div>
           <div className="custom-input-edit-footer">
             <button type="submit">{"Save"}</button>

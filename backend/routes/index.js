@@ -8,6 +8,7 @@ const projectsRoutes = require('./projects');
 const rolesRoutes = require('./roles');
 const projectRolesRoutes = require('./projectRoles');
 const prioritiesRoutes = require('./priorities')
+const commentsRoutes = require('./comments')
 
 var router = express.Router();
 
@@ -18,7 +19,8 @@ router.use("/login", login);
 router.use("/register", register);
 router.use("/projects", projectsRoutes);
 router.use("/priorities", prioritiesRoutes);
-router.use("/roles",rolesRoutes);
-router.use("/projectroles",projectRolesRoutes);
+router.use("/roles", rolesRoutes);
+router.use("/projectroles", projectRolesRoutes);
+router.use("/comments", commentsRoutes);
 
 module.exports = router;
