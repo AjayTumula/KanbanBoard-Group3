@@ -26,7 +26,7 @@ const Board = (props) => {
           {tasks?.map((item) => {
             return item.status_id === board.id && <Card
               key={item.id}
-              card={item}
+              task={item}
               boardId={board.id}
               removeCard={removeCard}
               onDragEnter={onDragEnter}

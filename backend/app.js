@@ -12,6 +12,8 @@ var statusesRouter = require('./routes/statuses');
 var loginRouter = require('./routes/login');
 var registerRouter = require('./routes/register');
 var projectsRouter = require('./routes/projects');
+var rolesRouter = require('./routes/roles');
+var projectRolesRouter = require('./routes/projectRoles');
 
 var app = express();
 
@@ -32,6 +34,8 @@ app.use('/statuses', statusesRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/projects', projectsRouter);
+app.use('/roles', rolesRouter);
+app.use('/projectroles', projectRolesRouter);
 
 app.use(cors({
   origin: '*'

@@ -6,9 +6,9 @@ import Dropdown from "./Dropdown";
 import CardInfo from "./CardInfo";
 
 function Card(props) {
-  const { card, boardId, removeCard, onDragEnd, onDragEnter, updateCard } =
+  const { task, boardId, removeCard, onDragEnd, onDragEnter, updateCard } =
     props;
-  const { id, name, description, date, tasks, priority } = card;
+  const { id, name, description, date, tasks, priority } = task;
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -17,7 +17,7 @@ function Card(props) {
       {showModal && (
         <CardInfo
           onClose={() => setShowModal(false)}
-          card={card}
+          task={task}
           boardId={boardId}
           updateCard={updateCard}
           setShowModal={setShowModal}
@@ -25,7 +25,7 @@ function Card(props) {
       )}
       <div
         className="card"
-        key={card.id}
+        key={task.id}
         draggable
         onDragEnd={() => onDragEnd(boardId, id)}
         onDragEnter={() => onDragEnter(boardId, id)}
