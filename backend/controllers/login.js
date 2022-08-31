@@ -3,16 +3,20 @@ const db = require("../database");
 const getUser = async (req, res) => {
     try {
         await db.serialize(function() {
-            return db.all("SELECT name, email, password from users WHERE email LIKE ?", [req.body.email], 
+            return db.all("SELECT id, name, email, password from users WHERE email LIKE ?", [req.body.email], 
             function(err , rows) {
                 if(err){
                     res.send("Error encountered while fetching user data");
                     return console.error(err.message);
                 }
                 else {
+                    console.log('login response',rows)
                     if(rows && rows[0].password === req.body.password){
                         res.send({
-                            loggedIn : true,
+                            "loggedIn" : true,
+                            "id":rows[0].id,
+                            "name":rows[0].name,
+                            "email":rows[0].email
                         });
                     } else {
                         res.send({
@@ -30,12 +34,14 @@ const getUser = async (req, res) => {
 const changePassword = async (req, res) => {
     try {
         await db.serialize(function() {
+            console.log("req",req)
             return db.all("UPDATE users SET password = ? WHERE users.id = ?" , [req,body.newPassword, req.body.uer_id], function(err, rows) {
                 if(err){
                     res.send("Error encountered while fetching the password");
                     return console.error(err.message);
                 }
                 else {
+                    console.log(res);
                     res.send({
                         data: rows,
                     });

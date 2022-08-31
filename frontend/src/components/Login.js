@@ -3,7 +3,7 @@ import AuthContext from "../context/AuthProvider";
 import { login } from "../api/api";
 
 const Login = () => {
-      const { setAuth } = useContext(AuthContext);
+      const { setAuthData } = useContext(AuthContext);
       const userRef = useRef();
       const errRef  = useRef();
 
@@ -28,6 +28,7 @@ const Login = () => {
             console.log(response);
             if(response.data.loggedIn){
                 setSuccess(true);
+                setAuthData({"name":response.data.name, "id":response.data.id, "email":response.data.email, "isAdmin":"", "projectId":""})
             }
             else{
                 setSuccess(false);

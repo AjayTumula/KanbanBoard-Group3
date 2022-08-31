@@ -10,7 +10,6 @@ import ChangePassword from "./ChangePassword";
 const Project = () => {
     const [projects, setProjects] = useState([]);
     const [refetchData, setRefetchData] = useState(true);
-    const [showChangePassword, setShowChangePassword] = useState(false);
     
     const fetchData = useCallback(
         async () => {
@@ -57,10 +56,7 @@ const Project = () => {
                 </div>
                 
                 <div className="app">
-                    <div>
-                       <button onClick={setShowChangePassword(true)}> Change Password</button>
-                       <ChangePassword/>
-                    </div>
+                    <ChangePassword/>
                 </div>
             </div>
            
