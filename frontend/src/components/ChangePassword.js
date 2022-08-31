@@ -13,11 +13,11 @@ const ChangePassword = () => {
       const handleSubmit = useCallback(
         async (e) => {
             e.preventDefault();
-            const fetchUser = {"password": newPassword, "id":auth.data.id};
+            const fetchUser = {"password": newPassword, "user_id": 1};
             const response = await changePassword(fetchUser);
-            console.log(response);
-            if(response){
-                showChangePassword(false);
+            console.log('resposnde from', response);
+            if(response.data === 'success'){
+                setShowChangePassword(false);
                 setErrMsg('');
                 setSuccessMsgInd(true);
             }

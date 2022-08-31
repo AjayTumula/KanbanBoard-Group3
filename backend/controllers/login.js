@@ -34,21 +34,22 @@ const getUser = async (req, res) => {
 const changePassword = async (req, res) => {
     try {
         await db.serialize(function() {
-            console.log("req",req)
-            return db.all("UPDATE users SET password = ? WHERE users.id = ?" , [req,body.newPassword, req.body.uer_id], function(err, rows) {
+            console.log("req",req.body)
+            return db.all("UPDATE users SET password = ? WHERE users.id = ?" , [req.body.password, req.body.user_id], function(err, rows) {
                 if(err){
-                    res.send("Error encountered while fetching the password");
+                    res.send("Error encountered while updating the password");
                     return console.error(err.message);
                 }
                 else {
                     console.log(res);
                     res.send({
-                        data: rows,
+                        data: 'success',
                     });
                 }
             });
         });
     } catch (error) {
+        console.log('error', error)
     return res.status(401).json({ error: "Could not change password" });
   }
 };
