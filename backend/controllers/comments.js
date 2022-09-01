@@ -44,7 +44,6 @@ const addComment = async (req, res) => {
 const deleteComment = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log('iddd', id)
         await db.serialize(function() {
             return db.all("DELETE from comments WHERE id=?", id, function(err, rows) {
                 if(err){

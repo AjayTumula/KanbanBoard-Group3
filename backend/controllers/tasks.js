@@ -41,7 +41,29 @@ const addNewTask = async (req, res) => {
   }
 };
 
+const deleteTask = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await db.serialize(function() {
+            return db.all("DELETE from tasks WHERE id=?", id, function(err, rows) {
+                if(err){
+                    res.send("Error encountered while deleting");
+                    return console.error(err.message);
+                }
+                else {
+                    res.send({
+                        status: 'success'
+                    });
+                }
+            });
+        });
+    } catch (error) {
+    return res.status(401).json({ error: "Could not delete task" });
+  }
+};
+
 module.exports = {
     getAllTasks,
     addNewTask,
+    deleteTask,
 }

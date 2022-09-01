@@ -10,6 +10,7 @@ const USERS_LIST_URL = '/users/list';
 const ROLES_URL = '/roles';
 const PROJECT_USER_URL = '/projectroles'
 const COMMENTS_URL = '/comments';
+const USERS_URL = '/users';
 
 export const getTasksData = async () => {
     const response = await axios.get(TASKS_URL).then((response) => response.data);
@@ -91,4 +92,9 @@ export const getCommentsListByTask = async (id) => {
 export const deleteComment = async (id) => {
     const response = await axios.delete(`${COMMENTS_URL}/${id}`).then((response) => response.data);
     return response;
+}
+
+export const getUsersByProjectId = async (id) => {
+    const response = await axios.get(`${USERS_URL}/${id}`).then((response) => response.data);
+    return response.data;
 }

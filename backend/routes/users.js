@@ -4,7 +4,7 @@ const { getUsersByProjectId,getAllUsers } = require("../controllers/users");
 var router = express.Router();
 
 /* GET user by id */
-router.get('/', getUsersByProjectId);
+router.get('/:id', getUsersByProjectId);
 router.get('/list', getAllUsers);
 
 module.exports = router;

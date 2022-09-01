@@ -3,7 +3,7 @@ import { Calendar, CheckCircle, List, Tag, User, Type, MessageSquare, Trash2 } f
 import Modal from "./Modal";
 import CustomInput from "./CustomInput";
 import Chip from "./Chip";
-import { getCommentsListByTask, getPriorityList, addComment, deleteComment } from "../api/api";
+import { getCommentsListByTask, getPriorityList, addComment, deleteComment, getUsersByProjectId } from "../api/api";
 import { Select, MenuItem } from "@mui/material";
 
 function CardInfo(props) {
@@ -21,6 +21,7 @@ function CardInfo(props) {
   const [comment, setComment] = useState('');
   const [priorityList, setPriorityList] = useState([]);
   const [commentsList, setCommentsList] = useState([]);
+  const [usersList, setUsersList] = useState([]);
   const [refetchData, setRefetchData] = useState(true);
   
   const fetchPriorities = useCallback(
@@ -39,11 +40,20 @@ function CardInfo(props) {
     [setCommentsList, task],
   );
 
+  const fetchUsers = useCallback(
+    async () => {
+      const response = await getUsersByProjectId(1)
+      setUsersList(response);
+    },
+    [setCommentsList, task],
+  );
+
   useEffect(
     () => {
       if(refetchData) {
         fetchPriorities();
         fetchComments();
+        fetchUsers();
         setRefetchData(false);
       }
     },
@@ -160,7 +170,7 @@ function CardInfo(props) {
   );
 
   const calculatedPercent = calculatePercent();
-
+    console.log('cardvalues', cardValues)
   return (
     <Modal onClose={onClose}>
       <div className="cardinfo">
@@ -210,12 +220,12 @@ function CardInfo(props) {
           <div className="cardinfo-box-select">
             <Select
               label="Assignee"
-              value={''}
+              value={cardValues.assignee_id}
               // onChange={handleChange}
               style={{height: '40px'}}
             >
               {
-                [].map((user, index) =>
+                usersList.map((user, index) =>
                 <MenuItem key={index} value={user.id}>{user.name}</MenuItem>
               )}
             </Select>
