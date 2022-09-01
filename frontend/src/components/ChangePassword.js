@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import AuthContext from "../context/AuthProvider";
 import {changePassword} from '../api/api';
 
@@ -13,7 +13,7 @@ const ChangePassword = () => {
       const handleSubmit = useCallback(
         async (e) => {
             e.preventDefault();
-            const fetchUser = {"password": newPassword, "user_id": 1};
+            const fetchUser = {"password": newPassword, "user_id": auth.data.id};
             const response = await changePassword(fetchUser);
             console.log('resposnde from', response);
             if(response.data === 'success'){
@@ -24,9 +24,7 @@ const ChangePassword = () => {
             else{
                 setErrMsg("Change password failed. Please try again");
             }
-        },
-    
-    );
+        }, [newPassword, auth]);
 
       return ( <div>
         {showChangePassword ? <section>
