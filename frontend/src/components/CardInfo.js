@@ -3,7 +3,7 @@ import { Calendar, CheckCircle, List, Tag, User, Type, MessageSquare, Trash2 } f
 import Modal from "./Modal";
 import CustomInput from "./CustomInput";
 import Chip from "./Chip";
-import { getCommentsListByTask, getPriorityList, addComment, deleteComment } from "../api/api";
+import { getCommentsListByTask, getPriorityList, addComment, deleteComment, getUsersByProjectId } from "../api/api";
 import { Select, MenuItem } from "@mui/material";
 
 function CardInfo(props) {
@@ -11,7 +11,7 @@ function CardInfo(props) {
     onClose,
     task,
     // boardId,
-    // updateCard,
+    updateCard,
     setShowModal
   } = props;
   // const [priorityId, setPriorityId] = useState(undefined);
@@ -21,6 +21,7 @@ function CardInfo(props) {
   const [comment, setComment] = useState('');
   const [priorityList, setPriorityList] = useState([]);
   const [commentsList, setCommentsList] = useState([]);
+  const [usersList, setUsersList] = useState([]);
   const [refetchData, setRefetchData] = useState(true);
   
   const fetchPriorities = useCallback(
@@ -39,15 +40,24 @@ function CardInfo(props) {
     [setCommentsList, task],
   );
 
+  const fetchUsers = useCallback(
+    async () => {
+      const response = await getUsersByProjectId(1)
+      setUsersList(response);
+    },
+    [setUsersList],
+  );
+
   useEffect(
     () => {
       if(refetchData) {
         fetchPriorities();
         fetchComments();
+        fetchUsers();
         setRefetchData(false);
       }
     },
-    [fetchPriorities, fetchComments, refetchData, setRefetchData]
+    [fetchPriorities, fetchComments, refetchData, setRefetchData, fetchUsers]
   );
 
   const updateTitle = (value) => {
@@ -119,17 +129,31 @@ function CardInfo(props) {
   // };
 
   const calculatePercent = () => {
-    if (!cardValues.remainingHours) return 0;
-    const completed = cardValues
-    return (completed / cardValues.tasks?.length) * 100;
+    if (!cardValues.progress_hours) return 0;
+    const completed = cardValues.progress_hours
+    return (completed / cardValues.estimate_hours) * 100;
   };
 
   const updateDate = (date) => {
     if (!date) return;
-
     setCardValues({
       ...cardValues,
       date,
+    });
+  };
+
+  const handleAssigneeChange = (e) => {
+    setCardValues({
+      ...cardValues,
+      assignee_id: e.target.value,
+    });
+  };
+
+  const handlePriorityChange = (e) => {
+    setCardValues({
+      ...cardValues,
+      priority_id: e.target.value,
+      priority: priorityList.find(item => item.id === e.target.value).name
     });
   };
 
@@ -157,6 +181,19 @@ function CardInfo(props) {
       }
     },
     [setRefetchData],
+  );
+
+  const handleSubmitForm = useCallback(
+    async () => {
+      delete cardValues.created_at;
+      delete cardValues.updated_at;
+      delete cardValues.priority;
+      const response = await updateCard(task.id, cardValues)
+      if (response === 'success') {
+        setRefetchData(true);
+      }
+    },
+    [cardValues, task, updateCard],
   );
 
   const calculatedPercent = calculatePercent();
@@ -210,12 +247,12 @@ function CardInfo(props) {
           <div className="cardinfo-box-select">
             <Select
               label="Assignee"
-              value={''}
-              // onChange={handleChange}
+              value={cardValues.assignee_id}
+              onChange={handleAssigneeChange}
               style={{height: '40px'}}
             >
               {
-                [].map((user, index) =>
+                usersList.map((user, index) =>
                 <MenuItem key={index} value={user.id}>{user.name}</MenuItem>
               )}
             </Select>
@@ -228,20 +265,20 @@ function CardInfo(props) {
           </div>
           <div className="cardinfo-box-labels">
             <Chip 
-              label={cardValues.priority}
+              label={priorityList.find(item => item.id === cardValues.priority_id)?.name}
             //  removeLabel={(removeLabel)}
              />
           </div>
           <div className="cardinfo-box-select">
             <Select
               label="Priority"
-              value={cardValues.priority}
-              // onChange={handleChange}
+              value={cardValues.priority_id}
+              onChange={handlePriorityChange}
               style={{height: '40px'}}
             >
               {
                 priorityList.map((priority, index) =>
-                <MenuItem key={index} value={priority.name}>{priority.name}</MenuItem>
+                <MenuItem key={index} value={priority.id}>{priority.name}</MenuItem>
               )}
             </Select>
           </div>
@@ -277,7 +314,7 @@ function CardInfo(props) {
             </div>
           </div>
           <div className="custom-input-edit-footer">
-            <button type="submit">{"Save"}</button>
+            <button type="submit" onClick={handleSubmitForm}>{"Save"}</button>
             <button type="submit" onClick={() => setShowModal(false)}>{"Cancel"}</button>
           </div>
         </div>

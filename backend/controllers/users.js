@@ -1,24 +1,23 @@
 const db = require("../database");
 
-const getUserById = async (req, res) => {
-    const { id } = req.query;
-
+const getUsersByProjectId = async (req, res) => {
+    const { id } = req.params;
     try {
-        const user = await db.serialize(function() {
-            return db.get("SELECT id, name, password FROM users WHERE id =?", id, function(err, rows) {
+        await db.serialize(function() {
+            return db.all("SELECT u.*, p.role_id AS roleId FROM users AS u JOIN project_roles AS p ON u.id = p.user_id WHERE p.project_id = ? AND p.role_id = 3", id, function(err, rows) {
                 if(err){
                     res.send("Error encountered while fetching");
                     return console.error(err.message);
                 }
                 else {
                     res.send({
-                        user: rows,
+                        data: rows,
                     });
                 }
             });
         });
     } catch (error) {
-    return res.status(401).json({ error: "User does not exist" });
+    return res.status(401).json({ error: "Could not fetch Users data" });
   }
 };
 
@@ -42,6 +41,6 @@ const getAllUsers = async (req, res) => {
   }
 };
 module.exports = {
-    getUserById,
+    getUsersByProjectId,
     getAllUsers
 }
