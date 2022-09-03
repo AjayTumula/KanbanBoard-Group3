@@ -10,6 +10,7 @@ const USERS_LIST_URL = '/users/list';
 const ROLES_URL = '/roles';
 const PROJECT_USER_URL = '/projectroles'
 const COMMENTS_URL = '/comments';
+const USERS_URL = '/users';
 
 export const getTasksData = async () => {
     const response = await axios.get(TASKS_URL).then((response) => response.data);
@@ -69,7 +70,6 @@ export const getUsersList = async () => {
 }
 
 export const assignUserToProject = async (params) => {
-    console.log(params)
     const response = await axios.post(PROJECT_USER_URL, params).then((response) => response);
     return response;
 }
@@ -89,7 +89,17 @@ export const deleteComment = async (id) => {
     return response;
 }
 
+export const getUsersByProjectId = async (id) => {
+    const response = await axios.get(`${USERS_URL}/${id}`).then((response) => response.data);
+    return response.data;
+}
+
 export const changePassword = async (params) => {
     const response = await axios.put(LOGIN_URL,params).then((response) => response.data);
     return response;
+}
+
+export const updateTaskDetails = async (id, params) => {
+    const response = await axios.put(`${TASKS_URL}/${id}`, params).then((response) => response.data);
+    return response.data;
 }

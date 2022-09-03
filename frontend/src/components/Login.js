@@ -26,7 +26,6 @@ const Login = () => {
             e.preventDefault();
             const fetchUser = {"email" : email, "password": password};
             const response = await login(fetchUser);
-            console.log(response);
             if(response.data.loggedIn){
                 setSuccess(true);
                 setAuthData({"name":response.data.name, "id":response.data.id, "email":response.data.email, "isAdmin":"", "projectId":""})
