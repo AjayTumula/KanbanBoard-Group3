@@ -1,9 +1,10 @@
 import React, { useRef, useState, useEffect, useContext, useCallback } from "react";
 import AuthContext from "../context/AuthProvider";
 import { login } from "../api/api";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-      const { setAuth } = useContext(AuthContext);
+      const { setAuthData } = useContext(AuthContext);
       const userRef = useRef();
       const errRef  = useRef();
 
@@ -11,7 +12,7 @@ const Login = () => {
       const [password, setPwd] = useState('');
       const [errMsg, setErrMsg] = useState('');
       const [success, setSuccess] = useState(false);
-
+      let navigate = useNavigate();
       useEffect(() => {
         userRef.current.focus();
        }, [])
@@ -28,44 +29,15 @@ const Login = () => {
             console.log(response);
             if(response.data.loggedIn){
                 setSuccess(true);
+                setAuthData({"name":response.data.name, "id":response.data.id, "email":response.data.email, "isAdmin":"", "projectId":""})
             }
             else{
                 setSuccess(false);
                 setErrMsg("Login failed. Please try again");
             }
 
-        },
-    
-    );
+        }, [email, password, setAuthData]);
 
-//       const handleSubmit = async (e) => {
-//         e.preventDefault();
-//         try {
-//             const fetchUser = {"email" : email, "password": password};
-//           const response = getUser(fetchUser);
-//           //console.log(JSON.stringify(response?.data));
-//           //console.log(JSON.stringify(response));
-//           //const accessToken = response?.data?.accessToken;
-//           //const roles = response?.data?.roles;
-//           //setAuth({ name, password, roles, accessToken });
-//           setAuth({email, password});
-//           //setUser('');
-//           //setPwd('');
-//           console.log(response);
-//           setSuccess(true);
-//       } catch (err) {
-//           if (!err?.response) {
-//               setErrMsg('No Server Response');
-//           } else if (err.response?.status === 400) {
-//               setErrMsg('Missing Username or Password');
-//           } else if (err.response?.status === 401) {
-//               setErrMsg('Unauthorized');
-//           } else {
-//               setErrMsg('Login Failed');
-//           }
-//           errRef.current.focus();
-//       }
-//   }
 
       return ( 
         <main className="App">
@@ -74,7 +46,11 @@ const Login = () => {
                 <h1>You are logged in!</h1>
                 <br />
                 <p>
-                    <a href="http://localhost:3000/projects">Go to Projects</a>
+                    <button
+                        onClick={() => {
+                            navigate('/projects');
+                        }}
+                    >Go to Projects</button>
                 </p>
             </section>
            ) : (
@@ -89,7 +65,7 @@ const Login = () => {
                     type= "text"
                     id="email"
                     ref={userRef}
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
                     required
@@ -100,7 +76,7 @@ const Login = () => {
                     type= "password"
                     id="name"
                     ref={userRef}
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={(e) => setPwd(e.target.value)}
                     value={password}
                     required

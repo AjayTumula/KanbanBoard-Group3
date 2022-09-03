@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { getProjectsList, addProject } from '../api/api';
 import CustomInput from "./CustomInput";
 import AssignUser from "./AssignUser";
+import ChangePassword from "./ChangePassword";
 
 // display project and assign users
 //user assigned to project and diff roles
@@ -55,12 +56,7 @@ const Project = () => {
                 </div>
                 
                 <div className="app">
-                    <div>
-                       <CustomInput
-                        text= "Changepassword"
-                        buttontext= "Changepassword"
-                        />
-                    </div>
+                    <ChangePassword/>
                 </div>
             </div>
            

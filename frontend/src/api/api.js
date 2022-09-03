@@ -58,10 +58,6 @@ export const addProject = async (params) => {
     return response;
 }
 
-export const changePassword = async (params) => {
-    const response = await axios.post(PROJECTS_URL, params).then((response) => response);
-    return response;
-}
 export const getRolesList = async () => {
     const response = await axios.get(ROLES_URL).then((response) => response.data);
     return response.data;
@@ -90,5 +86,10 @@ export const getCommentsListByTask = async (id) => {
 
 export const deleteComment = async (id) => {
     const response = await axios.delete(`${COMMENTS_URL}/${id}`).then((response) => response.data);
+    return response;
+}
+
+export const changePassword = async (params) => {
+    const response = await axios.put(LOGIN_URL,params).then((response) => response.data);
     return response;
 }
