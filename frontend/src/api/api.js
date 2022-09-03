@@ -59,10 +59,6 @@ export const addProject = async (params) => {
     return response;
 }
 
-export const changePassword = async (params) => {
-    const response = await axios.post(PROJECTS_URL, params).then((response) => response);
-    return response;
-}
 export const getRolesList = async () => {
     const response = await axios.get(ROLES_URL).then((response) => response.data);
     return response.data;
@@ -97,4 +93,9 @@ export const deleteComment = async (id) => {
 export const getUsersByProjectId = async (id) => {
     const response = await axios.get(`${USERS_URL}/${id}`).then((response) => response.data);
     return response.data;
+}
+
+export const changePassword = async (params) => {
+    const response = await axios.put(LOGIN_URL,params).then((response) => response.data);
+    return response;
 }
