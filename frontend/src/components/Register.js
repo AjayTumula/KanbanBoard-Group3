@@ -51,58 +51,14 @@ const Register = () => {
         setErrMsg('');
     }, [name, email, password, matchPwd])
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     // if button enabled with JS hack
-    //     const v1 = NAME_REGEX.test(name);
-    //     const v2 = PASSWORD_REGEX.test(password);
-    //     const v3 = EMAIL_REGEX.test(email);
-    //     if (!v1 || !v2 || !v3) {
-    //         setErrMsg("Invalid Entry");
-    //         return;
-    //     }
-    //     const newUser = {
-    //         name: name,
-    //         password: password,
-    //         email: email
-    //       }
-    //     try {
-    //         const response = addNewUser(newUser);
-    //         //console.log(response?.data);
-    //         //console.log(response?.accessToken);
-    //         console.log(JSON.stringify(response));
-    //         console.log(newUser.email + " This is new user details");
-    //         setSuccess(true);
-    //         //clear state and controlled inputs
-    //         //need value attrib on inputs for this
-    //         setUser('');
-    //         setPwd('');
-    //         setEmail('');
-    //         setMatchPwd('');
-    //     } catch (err) {
-    //         if (!err?.response) {
-    //             setErrMsg('No Server Response');
-    //         } else if (err.response?.status === 409) {
-    //             setErrMsg('Username Taken');
-    //         } else {
-    //             setErrMsg('Registration Failed')
-    //         }
-    //         errRef.current.focus();
-    //     }
-    // }
-
-
-    const handleSubmit =
-    useCallback(
-        async (e) => {
-            e.preventDefault();
-            const newUser = { "name" : name, "password" : password, "email" : email};
-            const response = await addNewUser(newUser)
-            if (response.data.status === 'success') {
-                setSuccess(true);
-            }
-        },
-          );
+    const handleSubmit = useCallback( async (e) => {
+        e.preventDefault();
+        const newUser = { "name" : name, "password" : password, "email" : email};
+        const response = await addNewUser(newUser)
+        if (response.data.status === 'success') {
+            setSuccess(true);
+        }
+    }, [name, email, password])
     
     return (
         <main className="App">

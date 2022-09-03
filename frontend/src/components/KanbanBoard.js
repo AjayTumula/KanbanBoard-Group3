@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Board from "./Board";
 import CustomInput from "./CustomInput";
-import { addNewStatus, addNewTask, getStatusData, getTasksData } from '../api/api';
+import { addNewStatus, addNewTask, getStatusData, getTasksData, updateTaskDetails } from '../api/api';
 
 const KanbanBoard = () => {
 const [boards, setBoards] = useState([]);
@@ -88,20 +88,16 @@ const removeCard = (boardId, cardId) => {
   setBoards(tempBoardsList);
 };
 
-const updateCard = (boardId, cardId, card) => {
-  const boardIndex = boards.findIndex((item) => item.id === boardId);
-  if (boardIndex < 0) return;
-
-  const tempBoardsList = [...boards];
-  const cards = tempBoardsList[boardIndex].cards;
-
-  const cardIndex = cards.findIndex((item) => item.id === cardId);
-  if (cardIndex < 0) return;
-
-  tempBoardsList[boardIndex].cards[cardIndex] = card;
-
-  setBoards(tempBoardsList);
-};
+const updateCard = useCallback(
+  async (taskId, cardValues) => {
+    const response = await updateTaskDetails(taskId, cardValues)
+    if (response === 'success') {
+      setRefetchData(true);
+      return response
+    }
+  },
+  [setRefetchData],
+);
 
 const onDragEnd = (boardId, cardId) => {
   const sourceBoardIndex = boards.findIndex(

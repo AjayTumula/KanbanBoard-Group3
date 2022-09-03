@@ -11,7 +11,7 @@ function CardInfo(props) {
     onClose,
     task,
     // boardId,
-    // updateCard,
+    updateCard,
     setShowModal
   } = props;
   // const [priorityId, setPriorityId] = useState(undefined);
@@ -45,7 +45,7 @@ function CardInfo(props) {
       const response = await getUsersByProjectId(1)
       setUsersList(response);
     },
-    [setCommentsList, task],
+    [setUsersList],
   );
 
   useEffect(
@@ -57,7 +57,7 @@ function CardInfo(props) {
         setRefetchData(false);
       }
     },
-    [fetchPriorities, fetchComments, refetchData, setRefetchData]
+    [fetchPriorities, fetchComments, refetchData, setRefetchData, fetchUsers]
   );
 
   const updateTitle = (value) => {
@@ -136,7 +136,6 @@ function CardInfo(props) {
 
   const updateDate = (date) => {
     if (!date) return;
-
     setCardValues({
       ...cardValues,
       date,
@@ -185,19 +184,20 @@ function CardInfo(props) {
   );
 
   const handleSubmitForm = useCallback(
-    async (id) => {
-      console.log('cardValues on submit', cardValues)
-      // const response = await deleteComment(id)
-      // if (response.status === 'success') {
-      //   setRefetchData(true);
-      // }
+    async () => {
+      delete cardValues.created_at;
+      delete cardValues.updated_at;
+      delete cardValues.priority;
+      const response = await updateCard(task.id, cardValues)
+      if (response === 'success') {
+        setRefetchData(true);
+      }
     },
-    [cardValues],
+    [cardValues, task, updateCard],
   );
 
   const calculatedPercent = calculatePercent();
-    console.log('cardvalues', cardValues)
-    // console.log('priorityList.map', priorityList.map((priority) => priority.id === cardValues.priority_id ? priority.name : '')[0])
+
   return (
     <Modal onClose={onClose}>
       <div className="cardinfo">
@@ -265,7 +265,7 @@ function CardInfo(props) {
           </div>
           <div className="cardinfo-box-labels">
             <Chip 
-              label={cardValues.priority}
+              label={priorityList.find(item => item.id === cardValues.priority_id)?.name}
             //  removeLabel={(removeLabel)}
              />
           </div>

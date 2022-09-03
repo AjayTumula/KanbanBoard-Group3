@@ -15,7 +15,6 @@ const ChangePassword = () => {
             e.preventDefault();
             const fetchUser = {"password": newPassword, "user_id": auth.data.id};
             const response = await changePassword(fetchUser);
-            console.log('resposnde from', response);
             if(response.data === 'success'){
                 setShowChangePassword(false);
                 setErrMsg('');
